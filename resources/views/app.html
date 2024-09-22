@@ -2,18 +2,120 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #e7e7e7;
+    font-family: Roboto, Noto Sans, Arial, sans-serif;
+    color: #333;
+  }
+
+  #products {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .product:nth-child(odd) { 
+    background: #fff;
+  }
+
+  .product:nth-child(even) {
+    background: #f8f8f8;
+  }
+
+  .product {
+    width: 100%;
+    display: flex;
+    padding: 5px;
+    flex: 1 1 auto;
+  }
+
+  .product > * {
+    width: 100%;
+    display: flex;
+    flex: 1 1 auto;
+    padding: 5px;
+    align-items: center;
+  }
+
+  .product > .min {
+    flex: 0 0;
+  }
+
+  .number, .orderamount {
+    width: 130px;
+  }
+
+  .buttons {
+    display: flex;
+    padding: 10px;
+    background: #fff;
+    margin-bottom: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .button {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 10px;
+  }
+
+  button {
+    outline: none;
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    padding: 7px;
+    cursor: pointer;
+    transition: 0.3s background;
+  }
+
+  button:hover {
+    background: #f9f9f9;
+  }
+  </style>
 </head>
 <body>
-  <button type="button" id="load">Load</button>
-  <button type="empty" id="empty">Empty</button>
+  <div class="buttons">
+    <button type="button" id="load" class="button">Load</button>
+    <button type="empty" id="empty" class="button">Empty</button>
+  </div>
 
   <div id="products"></div>
+
+  <template id="product">
+    <div class="product">
+      <div class="number"></div>
+      <div class="name"></div>
+      <div class="orderamount"></div>
+      <div class="min">
+        <button class="add">Add</button>
+      </div>
+      <div class="min">
+        <button class="clear">Clear</button>
+      </div>
+    </div>
+  </template>
 
   <script type="module"> 
   import VirtualScroller from 'https://cdn.jsdelivr.net/npm/virtual-scroller@1.13.1/dom/+esm'
 
+  // this will make sure we have 
+  // requests executed one by one
+  var queue = Promise.resolve(true);
+
   function loadProducts() {
-    return fetch('/api/products')
+    return queue = queue
+    .then(() => fetch('/api/products'))
     .then((response) => response.json())
     .catch((err) => console.log(err));
   }
@@ -25,28 +127,23 @@
       body: JSON.stringify(data)
     };
 
-    return fetch('/api/products/' + id, options)
+    return queue = queue
+    .then(() => fetch('/api/products/' + id, options))
     .then((response) => response.json())
     .catch((err) => console.log(err));
   }
 
   function renderProduct(product) {
-    const root = document.createElement('article');
+    const root = document.getElementById('product').content.querySelector('.product').cloneNode(true);
 
-    const name = document.createElement('a');
-    name.textContent = product.name;
+    root.querySelector('.number').textContent = product.number;
+    root.querySelector('.name').textContent = product.name;
 
-    root.appendChild(name);
+    const orderamount = root.querySelector('.orderamount');
 
-    const orderamount = document.createElement('span');
     orderamount.textContent = product.orderamount;
 
-    root.appendChild(orderamount);
-
-    const addButton = document.createElement('button');
-    addButton.textContent = 'Add';
-
-    addButton.addEventListener(
+    root.querySelector('.add').addEventListener(
       'click', 
       () => {
         product.orderamount++;
@@ -58,12 +155,7 @@
       false
     );
 
-    root.appendChild(addButton);
-
-    const clearButton = document.createElement('button');
-    clearButton.textContent = 'Clear';
-
-    clearButton.addEventListener(
+    root.querySelector('.clear').addEventListener(
       'click', 
       () => {
         product.orderamount = 0;
@@ -74,8 +166,6 @@
       }, 
       false
     );
-
-    root.appendChild(clearButton);
 
     return root;
   }
