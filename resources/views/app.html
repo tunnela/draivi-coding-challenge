@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <button type="button" id="load">Load</button>
+  <button type="empty" id="empty">Empty</button>
+
+  <div id="products"></div>
+
+  <script type="module"> 
+  import VirtualScroller from 'https://cdn.jsdelivr.net/npm/virtual-scroller@1.13.1/dom/+esm'
+
+  function loadProducts() {
+    return fetch('/api/products')
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+  }
+
+  function updateProduct(id, data) {
+    const options = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    return fetch('/api/products/' + id, options)
+    .then((response) => response.json())
+    .catch((err) => console.log(err));
+  }
+
+  function renderProduct(product) {
+    const root = document.createElement('article');
+
+    const name = document.createElement('a');
+    name.textContent = product.name;
+
+    root.appendChild(name);
+
+    const orderamount = document.createElement('span');
+    orderamount.textContent = product.orderamount;
+
+    root.appendChild(orderamount);
+
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add';
+
+    addButton.addEventListener(
+      'click', 
+      () => {
+        product.orderamount++;
+
+        updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
+
+        orderamount.textContent = product.orderamount;
+      }, 
+      false
+    );
+
+    root.appendChild(addButton);
+
+    const clearButton = document.createElement('button');
+    clearButton.textContent = 'Clear';
+
+    clearButton.addEventListener(
+      'click', 
+      () => {
+        product.orderamount = 0;
+
+        updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
+
+        orderamount.textContent = product.orderamount;
+      }, 
+      false
+    );
+
+    root.appendChild(clearButton);
+
+    return root;
+  }
+
+  const virtualScroller = new VirtualScroller(
+    document.getElementById('products'),
+    [],
+    renderProduct
+  );
+
+  const loadButton = document.getElementById('load');
+
+  loadButton.addEventListener(
+    'click', 
+    () => {
+      loadProducts()
+      .then((json) => virtualScroller.setItems(json));
+    }, 
+    false
+  );
+
+  const emptyButton = document.getElementById('empty');
+
+  emptyButton.addEventListener(
+    'click', 
+    () => virtualScroller.setItems([]), 
+    false
+  );
+  </script>
+</body>
+</html>
