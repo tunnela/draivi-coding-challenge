@@ -6,7 +6,7 @@ use Tunnela\DraiviCodingChallenge\Scraper;
 
 set_time_limit(0);
 
-echo "Scraper started! Please wait...\n";
+echo "\nScraper started! Please wait...\n";
 
 $script = root_path('scripts/scrape.js');
 
