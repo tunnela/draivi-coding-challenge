@@ -109,6 +109,7 @@ class Scraper
         if (empty($this->options['remotePrimaryKey'])) {
             throw new \Exception('`remotePrimaryKey` field is required');
         }
+        $ids = [];
         $key = $this->options['remotePrimaryKey'];
 
         foreach ($data as $item) {
