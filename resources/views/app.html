@@ -54,6 +54,16 @@
     width: 130px;
   }
 
+  .orderamount {
+    font-weight: 600;
+    color: #0b9dac;
+  }
+
+  .orderamount[data-orderamount="0"] {
+    font-weight: normal;
+    color: #333;
+  }
+
   .buttons {
     display: flex;
     padding: 10px;
@@ -86,7 +96,7 @@
 </head>
 <body>
   <div class="buttons">
-    <button type="button" id="load" class="button">Load</button>
+    <button type="button" id="list" class="button">List</button>
     <button type="empty" id="empty" class="button">Empty</button>
   </div>
 
@@ -142,6 +152,7 @@
     const orderamount = root.querySelector('.orderamount');
 
     orderamount.textContent = product.orderamount;
+    orderamount.dataset.orderamount = product.orderamount;
 
     root.querySelector('.add').addEventListener(
       'click', 
@@ -151,6 +162,7 @@
         updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
 
         orderamount.textContent = product.orderamount;
+        orderamount.dataset.orderamount = product.orderamount;
       }, 
       false
     );
@@ -163,6 +175,7 @@
         updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
 
         orderamount.textContent = product.orderamount;
+        orderamount.dataset.orderamount = product.orderamount;
       }, 
       false
     );
@@ -176,9 +189,9 @@
     renderProduct
   );
 
-  const loadButton = document.getElementById('load');
+  const listButton = document.getElementById('list');
 
-  loadButton.addEventListener(
+  listButton.addEventListener(
     'click', 
     () => {
       loadProducts()
