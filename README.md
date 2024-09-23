@@ -2,7 +2,7 @@
 
 ### Requirements
 
-- PHP 7+ (`php-sqlite3` package for fast testing)
+- PHP 7+ (`php-sqlite3` package for fast testing, `php-gd` for Excel parser)
 - Composer
 - Node/NPM
 - Chrome (installed with `puppeteer` package)
