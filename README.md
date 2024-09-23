@@ -41,3 +41,15 @@ composer serve
 ### Demo
 
 [https://draivi-coding-challenge.tunne.la/](https://draivi-coding-challenge.tunne.la/)
+
+### Code
+
+The most important code files can be found at:
+
+- Scraper: [console/scrape.php](https://github.com/tunnela/draivi-coding-challenge/blob/master/console/scrape.php) + [scripts/scrape.js](https://github.com/tunnela/draivi-coding-challenge/blob/master/scripts/scrape.js)
+- App: [public/index.php](https://github.com/tunnela/draivi-coding-challenge/blob/master/public/index.php)
+- JS: [public/js/app.js](https://github.com/tunnela/draivi-coding-challenge/blob/master/public/js/app.js)
+- CSS: [public/css/app.css](https://github.com/tunnela/draivi-coding-challenge/blob/master/public/css/app.css)
+- HTML: [resources/views/app.html](https://github.com/tunnela/draivi-coding-challenge/blob/master/resources/views/app.html)
+- Core: [src/*](https://github.com/tunnela/draivi-coding-challenge/blob/master/src)
+
