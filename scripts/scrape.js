@@ -21,12 +21,6 @@ const orderRecentFiles = (dir) => {
     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
 
-const file = getMostRecentFile(outputPath);
-
-console.log(win32.resolve(win32.normalize(outputPath + '/' + file.file)));
-
-return;
-
 puppeteer.use(StealthPlugin());
 
 puppeteer.launch({ 
