@@ -1,5 +1,9 @@
 ## Draivi Coding Challenge
 
+### Demo
+
+[https://draivi-coding-challenge.tunne.la/](https://draivi-coding-challenge.tunne.la/)
+
 ### Requirements
 
 - PHP 7+ (`php-sqlite3` package for fast testing, `php-gd` for Excel parser)
@@ -37,10 +41,6 @@ composer serve
 ```
 
 ...and then visit `http://localhost:8000` on a web browser.
-
-### Demo
-
-[https://draivi-coding-challenge.tunne.la/](https://draivi-coding-challenge.tunne.la/)
 
 ### Code
 
