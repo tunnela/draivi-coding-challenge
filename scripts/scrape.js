@@ -24,7 +24,11 @@ const orderRecentFiles = (dir) => {
 puppeteer.use(StealthPlugin());
 
 puppeteer.launch({ 
-  headless: true
+  headless: true,
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox'
+  ]
 })
 .then(async browser => {
   const now = Date.now();
