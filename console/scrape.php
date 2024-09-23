@@ -1,27 +1,29 @@
 <?php
 
-$root = dirname(__DIR__);
-
-require $root . '/bootstrap/app.php';
+require dirname(__DIR__) . '/bootstrap/app.php';
 
 use Tunnela\DraiviCodingChallenge\Scraper;
 
-$script = $root . '/scripts/download-alko-dataset.js';
+echo "Scraper started! Please wait...\n";
+
+$script = root_path('scripts/scrape.js');
 
 $scraper = new Scraper($script, [
-    'cachePath' => $root . '/storage/cache',
-    'cacheDuration' => 60,
+    'cachePath' => root_path('storage/cache'),
+     // add seconds here to cache result for X seconds
+    'cacheDuration' => null,
     'database' => [
         'driver' => 'sqlite',
-        'file' => $root . '/resources/database.sqlite'
-    ]
+        'file' => root_path('resources/databases/database.sqlite')
+    ],
+    'remotePrimaryKey' => 'number'
 ]);
 
 $scraper->onCreateQuery(function() {
     return '
         CREATE TABLE IF NOT EXISTS "products" (
             "id" INTEGER,
-            "number" INTEGER NOT NULL UNIQUE,
+            "number" NUMERIC NOT NULL UNIQUE,
             "name" TEXT NOT NULL,
             "bottlesize" TEXT,
             "price" NUMERIC NOT NULL,
@@ -42,6 +44,12 @@ $scraper->onInsertQuery(function($fields, $bindings) {
     ';
 });
 
+$scraper->onDeleteQuery(function($remotePrimary, $bindings) {
+    return '
+        DELETE FROM "products" WHERE ' . $remotePrimary . ' NOT IN (' . $bindings . ');
+    ';
+});
+
 $scraper->onLoad(function($dataset) {
     $currencyParams = [
         'access_key' => getenv('CURRENCYLAYER_ACCESS_KEY'),
@@ -51,10 +59,11 @@ $scraper->onLoad(function($dataset) {
 
     $currencyUrl = 'https://api.currencylayer.com/live?' . http_build_query($currencyParams);
 
-    $currencyConversion = json_decode(file_get_contents($currencyUrl), true);
+    $currencyResult = file_get_contents($currencyUrl);
+    $currencyConversion = json_decode($currencyResult, true);
 
     if (!$currencyConversion || empty($currencyConversion['quotes']['EURGBP'])) {
-        throw new \Exception('Could not load currancy conversion information');
+        throw new \Exception('Could not load currency conversion information: ' . $currencyResult);
     }
     $multiplier = floatval($currencyConversion['quotes']['EURGBP']);
 

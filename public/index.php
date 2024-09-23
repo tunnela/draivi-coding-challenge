@@ -1,16 +1,14 @@
 <?php
 
-$root = dirname(__DIR__);
-
-require $root . '/bootstrap/app.php';
+require dirname(__DIR__) . '/bootstrap/app.php';
 
 use Tunnela\DraiviCodingChallenge\App;
 
 $app = new App([
-    'viewPath' => $root . '/resources/views',
+    'viewPath' => root_path('resources/views'),
     'database' => [
         'driver' => 'sqlite',
-        'file' => $root . '/resources/database.sqlite'
+        'file' => root_path('resources/databases/database.sqlite')
     ]
 ]);
 
@@ -21,7 +19,7 @@ $app->get('/', function() {
 $app->get('/api/products', function($database) {
     return $this->json(
         $database
-        ->query('SELECT * FROM products')
+        ->query('SELECT * FROM products ORDER BY number ASC')
         ->fetchAll(\PDO::FETCH_ASSOC)
     );
 });

@@ -10,6 +10,7 @@ const path = require('path');
 
 const getMostRecentFile = (dir) => {
   const files = orderRecentFiles(dir);
+
   return files.length ? files[0] : undefined;
 };
 
@@ -20,14 +21,18 @@ const orderRecentFiles = (dir) => {
     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
 
-/*const file = getMostRecentFile(outputPath);
+const file = getMostRecentFile(outputPath);
 
 console.log(win32.resolve(win32.normalize(outputPath + '/' + file.file)));
-return;*/
+
+return;
 
 puppeteer.use(StealthPlugin());
 
-puppeteer.launch({ headless: true }).then(async browser => {
+puppeteer.launch({ 
+  headless: true
+})
+.then(async browser => {
   const now = Date.now();
   const page = await browser.newPage();
   const cursor = createCursor(page);
@@ -36,8 +41,8 @@ puppeteer.launch({ headless: true }).then(async browser => {
   await page.waitForSelector('#onetrust-accept-btn-handler');
 
   page._client().send('Browser.setDownloadBehavior', {
-      behavior: 'allow', 
-      downloadPath: win32.resolve(win32.normalize(outputPath))
+    behavior: 'allow', 
+    downloadPath: win32.resolve(win32.normalize(outputPath))
   });
 
   page._client().on('Page.downloadProgress', e => {
@@ -54,10 +59,13 @@ puppeteer.launch({ headless: true }).then(async browser => {
   });
 
   let links = await page.$$('#onetrust-accept-btn-handler');
+
   await links[0].click();
 
+  // let's wait for popup to close
   await setTimeout(1000);
 
   links = await page.$$('a[href$=".xlsx"]');
+
   await links[0].click();
 });

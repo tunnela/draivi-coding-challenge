@@ -18,7 +18,7 @@
     },
     "scripts": {
         "format": "vendor/bin/php-cs-fixer fix src",
-        "scrape": "php -f bin/scrape.php",
+        "scrape": "php -f console/scrape.php",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@php -S localhost:8000 -t public"

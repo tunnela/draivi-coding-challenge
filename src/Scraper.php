@@ -20,10 +20,13 @@ class Scraper
 
     protected $onInsertQueryCallback;
 
+    protected $onDeleteQueryCallback;
+
     public function __construct($source, $options = [])
     {
         $defaults = [
-            'cacheDuration' => null
+            'cacheDuration' => null,
+            'remotePrimaryKey' => null
         ];
 
         $this->id = hash('sha256', $source);
@@ -36,8 +39,8 @@ class Scraper
 
     public function setup()
     {
-        if (!empty($this->options['database']['create'])) {
-            $this->database->exec($this->options['database']['create']);
+        if ($this->onCreateQueryCallback) {
+            $this->database->exec(call_user_func($this->onCreateQueryCallback));
         }
     }
 
@@ -58,12 +61,18 @@ class Scraper
         $data = $this->loader->load($this->source);
         $data = $this->onLoadCallback ? call_user_func($this->onLoadCallback, $data, $cache) : $data;
 
-        $this->save($data);
+        $this->process($data);
 
         $cacheResult && $cache->put($this->id, true, $this->options['cacheDuration']);
     }
 
-    public function save($data) 
+    protected function process($data) 
+    {
+        $this->insertOrUpdate($data);
+        $this->delete($data);
+    }
+
+    protected function insertOrUpdate($data) 
     {
         if (empty($this->onInsertQueryCallback)) {
             return;
@@ -98,6 +107,35 @@ class Scraper
         }
     }
 
+    protected function delete($data) 
+    {
+        if (empty($this->onDeleteQueryCallback)) {
+            return;
+        }
+        if (empty($this->options['remotePrimaryKey'])) {
+            throw new \Exception('`remotePrimaryKey` field is required');
+        }
+        $key = $this->options['remotePrimaryKey'];
+
+        foreach ($data as $item) {
+            $ids[] = $item[$key] ?? null;
+        }
+        $ids = array_filter(array_unique($ids));
+
+        if (!$ids) {
+            return;
+        }
+        $bindings = implode(', ', array_fill(0, count($ids), '?'));
+        $query = call_user_func($this->onDeleteQueryCallback, $key, $bindings);
+
+        if (!$query) {
+            return;
+        }
+        $this->database
+        ->prepare($query)
+        ->execute($ids);
+    }
+
     public function getId() 
     {
         return $this->id;
@@ -121,5 +159,10 @@ class Scraper
     public function onInsertQuery($callback) 
     {
         $this->onInsertQueryCallback = $callback;
+    }
+
+    public function onDeleteQuery($callback) 
+    {
+        $this->onDeleteQueryCallback = $callback;
     }
 }
