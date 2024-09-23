@@ -22,6 +22,12 @@ const orderRecentFiles = (dir) => {
     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
 
+const normalizePath = (path) => {
+  return isWin ? 
+    win32.resolve(win32.normalize(path)) : 
+    path.resolve(path.normalize(path));
+};
+
 puppeteer.use(StealthPlugin());
 
 puppeteer.launch({ 
@@ -42,7 +48,7 @@ puppeteer.launch({
 
   page._client().send('Browser.setDownloadBehavior', {
     behavior: 'allow', 
-    downloadPath: isWin ? win32.resolve(win32.normalize(outputPath)) : outputPath
+    downloadPath: normalizePath(outputPath)
   });
 
   page._client().on('Page.downloadProgress', e => {
@@ -52,7 +58,7 @@ puppeteer.launch({
       if (file.mtime.getTime() > now) {
         const filePath = outputPath + '/' + file.file;
 
-        console.log(isWin ? win32.resolve(win32.normalize(filePath)) : filePath);
+        console.log(normalizePath(filePath));
       } else {
         console.error('Could not download Alko dataset!');
       }
