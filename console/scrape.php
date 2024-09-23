@@ -4,7 +4,7 @@ require dirname(__DIR__) . '/bootstrap/app.php';
 
 use Tunnela\DraiviCodingChallenge\Scraper;
 
-set_time_limit(0);
+set_time_limit(10 * 60); // 10 mins max
 
 echo "\nScraper started! Please wait...\n";
 
