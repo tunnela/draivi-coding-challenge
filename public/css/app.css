@@ -11,6 +11,7 @@ body {
   background: #d6d3cf;
   font-family: Roboto, Noto Sans, Arial, sans-serif;
   color: #333;
+  font-size: 1em;
 }
 
 #loading {
@@ -161,4 +162,89 @@ button:hover {
 
 .header {
   border-bottom: 1px solid #ddd;
+}
+
+@media (max-width: 1000px) {
+  body {
+    font-size:  0.8em;
+  }
+
+  .orderamount {
+    width: 65px;
+  }
+}
+
+@media (max-width: 800px) {
+  .number {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .number {
+    display: block;
+  }
+
+  .header {
+    display: none;
+  }
+
+  .name {
+    order: -1;
+  }
+
+  .product {
+    flex-wrap: wrap;
+  }
+
+  .product > *:before {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .product > .number:before {
+    content: "#";
+    margin-right: 0px;
+  }
+
+  .product > .price:before {
+    content: "Price (€):";
+  }
+
+  .product > .priceGBP:before {
+    content: "Price (£):";
+  }
+
+  .product > .bottlesize:before {
+    content: "Size:";
+  }
+
+  .product > .orderamount:before {
+    content: "Amount:";
+  }
+
+  .product > .orderamount {
+    color: #0b9dac;
+    font-weight: 600;
+  }
+
+  .product > .orderamount[data-orderamount="0"] {
+    color: #333;
+    font-weight: normal;
+  }
+
+  .product > .orderamount:before {
+    color: #333;
+    font-weight: normal;
+  }
+
+  .product > .name {
+    font-weight: 600;
+  }
+
+  .product > * {
+    width: 100%;
+    flex: 0 0 auto;
+    font-weight: 500;
+  }
 }
