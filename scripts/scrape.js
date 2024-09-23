@@ -25,8 +25,9 @@ const orderRecentFiles = (dir) => {
 puppeteer.use(StealthPlugin());
 
 puppeteer.launch({ 
-  headless: true,
+  headless: 'shell',
   args: [
+    '--disable-gpu',
     '--no-sandbox',
     '--disable-setuid-sandbox'
   ]
