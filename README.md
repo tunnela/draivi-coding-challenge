@@ -1,5 +1,7 @@
 ## Draivi Coding Challenge
 
+A simple app consisting of a data scraper, an API and a client app. The scraper is used to download information about the latest Alko products and store it in the database. The API is used to access this data and the app is used to present it to end users.
+
 ### Demo
 
 [https://draivi-coding-challenge.tunne.la/](https://draivi-coding-challenge.tunne.la/)
