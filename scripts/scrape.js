@@ -7,6 +7,7 @@ const { createCursor } = require('ghost-cursor');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const fs = require('fs');
 const path = require('path');
+const isWin = process.platform === 'win32';
 
 const getMostRecentFile = (dir) => {
   const files = orderRecentFiles(dir);
@@ -40,7 +41,7 @@ puppeteer.launch({
 
   page._client().send('Browser.setDownloadBehavior', {
     behavior: 'allow', 
-    downloadPath: win32.resolve(win32.normalize(outputPath))
+    downloadPath: isWin ? win32.resolve(win32.normalize(outputPath)) : outputPath
   });
 
   page._client().on('Page.downloadProgress', e => {
@@ -48,7 +49,9 @@ puppeteer.launch({
       const file = getMostRecentFile(outputPath);
 
       if (file.mtime.getTime() > now) {
-        console.log(win32.resolve(win32.normalize(outputPath + '/' + file.file)));
+        const filePath = outputPath + '/' + file.file;
+
+        console.log(isWin ? win32.resolve(win32.normalize(filePath)) : filePath);
       } else {
         console.error('Could not download Alko dataset!');
       }
