@@ -1,5 +1,12 @@
 ## Draivi Coding Challenge
 
+### Requirements
+
+PHP 7+
+Composer
+Node/NPM
+Chrome (installed with Puppeteer)
+
 ### Setup
 
 Run the following commands to install required `npm` and `composer` packages:
@@ -30,3 +37,7 @@ composer serve
 ```
 
 ...and then visit `http://localhost:8000` on a web browser.
+
+### Demo
+
+[https://draivi-coding-challenge.tunne.la/](https://draivi-coding-challenge.tunne.la/)
