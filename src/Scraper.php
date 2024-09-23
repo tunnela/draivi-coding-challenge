@@ -103,32 +103,7 @@ class Scraper
 
     protected function delete($data) 
     {
-        if (empty($this->onDeleteQueryCallback)) {
-            return;
-        }
-        if (empty($this->options['remotePrimaryKey'])) {
-            throw new \Exception('`remotePrimaryKey` field is required');
-        }
-        $ids = [];
-        $key = $this->options['remotePrimaryKey'];
-
-        foreach ($data as $item) {
-            $ids[] = $item[$key] ?? null;
-        }
-        $ids = array_filter(array_unique($ids));
-
-        if (!$ids) {
-            return;
-        }
-        $bindings = implode(', ', array_fill(0, count($ids), '?'));
-        $query = call_user_func($this->onDeleteQueryCallback, $key, $bindings);
-
-        if (!$query) {
-            return;
-        }
-        $this->database
-        ->prepare($query)
-        ->execute($ids);
+        // @todo implement this later...
     }
 
     public function getId() 
