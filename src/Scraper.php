@@ -34,20 +34,14 @@ class Scraper
 
         $this->source = $source;
         $this->database = new Database($this->options['database'] ?? []);
-        $this->loader = new DataLoader;
-    }
-
-    public function setup()
-    {
-        if ($this->onCreateQueryCallback) {
-            $this->database->exec(call_user_func($this->onCreateQueryCallback));
-        }
+        $this->loader = new DataLoader($this->options['loader'] ?? []);
     }
 
     public function run()
-    {        
-        $this->setup();
-
+    {      
+        if ($this->onCreateQueryCallback) {
+            $this->database->exec(call_user_func($this->onCreateQueryCallback));
+        }
         $cacheResult = $this->options['cacheDuration'] !== null;
 
         if ($cacheResult && empty($this->options['cachePath'])) {

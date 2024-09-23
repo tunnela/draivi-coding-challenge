@@ -31,7 +31,10 @@ class DataLoader
 
     public function loadNodeScript($script) 
     {
-        $result = exec($this->options['nodePath'] . ' ' . escapeshellarg($script));
+        $result = exec(
+            escapeshellarg($this->options['nodePath']) . ' ' . 
+            escapeshellarg($script)
+        );
 
         if (!$result) {
             throw new \Exception("Could not load via node script!");

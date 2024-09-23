@@ -16,6 +16,9 @@ $scraper = new Scraper($script, [
         'driver' => 'sqlite',
         'file' => root_path('resources/databases/database.sqlite')
     ],
+    'loader' => [
+        'nodePath' => getenv('NODE_BIN_PATH') ?: 'node'
+    ],
     'remotePrimaryKey' => 'number'
 ]);
 
