@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #d6d3cf;
+  font-family: Roboto, Noto Sans, Arial, sans-serif;
+  color: #333;
+}
+
+#loading {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #0b9dac;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  background: #fff;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px #fff, 0 0 15px 3px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+  to { -webkit-transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 80px;
+  margin-bottom: 20px;
+}
+
+#products {
+  width: 100%;
+}
+
+.product:nth-child(odd) { 
+  background: #fff;
+}
+
+.product:nth-child(even) {
+  background: #eeecea;
+}
+
+.product {
+  width: 100%;
+  display: flex;
+  padding: 5px;
+  flex: 1 1 auto;
+}
+
+.product > * {
+  display: flex;
+  flex: 1 1;
+  padding: 5px;
+  align-items: center;
+}
+
+.product > .min {
+  flex: 0 0;
+}
+
+.container:has(#products:empty) > .header {
+  display: none;
+}
+
+.number {
+  width: 130px;
+  flex: 0 0 auto;
+}
+
+.orderamount {
+  width: 50px;
+  flex: 0 0 auto;
+}
+
+.orderamount {
+  font-weight: 600;
+  color: #0b9dac;
+}
+
+.orderamount[data-orderamount="0"] {
+  font-weight: normal;
+  color: #333;
+}
+
+.buttons {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  margin-bottom: 20px;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.08);
+}
+
+.name {
+  flex-grow: 3;
+}
+
+.button {
+  padding: 10px;
+}
+
+button {
+  outline: none;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  padding: 7px;
+  cursor: pointer;
+  transition: 0.3s background;
+  margin: 0 5px;
+}
+
+button:hover {
+  background: #f9f9f9;
+}
+
+.actions {
+  width: 130px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actions > button {
+  margin: 0 0 0 10px;
+}
+
+.product.header {
+  background: #fff;
+}
+
+.header > * {
+  font-weight: 600;
+  color: #333;
+  padding: 10px 5px;
+}
+
+.header {
+  border-bottom: 1px solid #ddd;
+}

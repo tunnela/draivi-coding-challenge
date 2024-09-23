@@ -2,97 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #e7e7e7;
-    font-family: Roboto, Noto Sans, Arial, sans-serif;
-    color: #333;
-  }
-
-  #products {
-    width: 100%;
-    max-width: 1200px;
-  }
-
-  .product:nth-child(odd) { 
-    background: #fff;
-  }
-
-  .product:nth-child(even) {
-    background: #f8f8f8;
-  }
-
-  .product {
-    width: 100%;
-    display: flex;
-    padding: 5px;
-    flex: 1 1 auto;
-  }
-
-  .product > * {
-    width: 100%;
-    display: flex;
-    flex: 1 1 auto;
-    padding: 5px;
-    align-items: center;
-  }
-
-  .product > .min {
-    flex: 0 0;
-  }
-
-  .number, .orderamount {
-    width: 130px;
-  }
-
-  .orderamount {
-    font-weight: 600;
-    color: #0b9dac;
-  }
-
-  .orderamount[data-orderamount="0"] {
-    font-weight: normal;
-    color: #333;
-  }
-
-  .buttons {
-    display: flex;
-    padding: 10px;
-    background: #fff;
-    margin-bottom: 10px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .button {
-    margin-left: 5px;
-    margin-right: 5px;
-    padding: 10px;
-  }
-
-  button {
-    outline: none;
-    background: #fff;
-    border-radius: 3px;
-    border: 1px solid #ddd;
-    padding: 7px;
-    cursor: pointer;
-    transition: 0.3s background;
-  }
-
-  button:hover {
-    background: #f9f9f9;
-  }
-  </style>
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, 
+  minimum-scale=1, width=device-width, height=device-height, viewport-fit=cover, shrink-to-fit=no">
+  <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
   <div class="buttons">
@@ -100,113 +14,37 @@
     <button type="empty" id="empty" class="button">Empty</button>
   </div>
 
-  <div id="products"></div>
+  <div class="container">
+    <div id="loading"></div>
+
+    <div class="product header">
+      <div class="number">#</div>
+      <div class="name">Name</div>
+      <div class="bottlesize">Size</div>
+      <div class="price">Price (€)</div>
+      <div class="priceGBP">Price (£)</div>
+      <div class="orderamount">Order</div>
+      <div class="actions"></div>
+    </div>
+
+    <div id="products"></div>
+  </div>
 
   <template id="product">
     <div class="product">
       <div class="number"></div>
       <div class="name"></div>
+      <div class="bottlesize"></div>
+      <div class="price"></div>
+      <div class="priceGBP"></div>
       <div class="orderamount"></div>
-      <div class="min">
+      <div class="actions">
         <button class="add">Add</button>
-      </div>
-      <div class="min">
         <button class="clear">Clear</button>
       </div>
     </div>
   </template>
 
-  <script type="module"> 
-  import VirtualScroller from 'https://cdn.jsdelivr.net/npm/virtual-scroller@1.13.1/dom/+esm'
-
-  // this will make sure we have 
-  // requests executed one by one
-  var queue = Promise.resolve(true);
-
-  function loadProducts() {
-    return queue = queue
-    .then(() => fetch('/api/products'))
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
-  }
-
-  function updateProduct(id, data) {
-    const options = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    };
-
-    return queue = queue
-    .then(() => fetch('/api/products/' + id, options))
-    .then((response) => response.json())
-    .catch((err) => console.log(err));
-  }
-
-  function renderProduct(product) {
-    const root = document.getElementById('product').content.querySelector('.product').cloneNode(true);
-
-    root.querySelector('.number').textContent = product.number;
-    root.querySelector('.name').textContent = product.name;
-
-    const orderamount = root.querySelector('.orderamount');
-
-    orderamount.textContent = product.orderamount;
-    orderamount.dataset.orderamount = product.orderamount;
-
-    root.querySelector('.add').addEventListener(
-      'click', 
-      () => {
-        product.orderamount++;
-
-        updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
-
-        orderamount.textContent = product.orderamount;
-        orderamount.dataset.orderamount = product.orderamount;
-      }, 
-      false
-    );
-
-    root.querySelector('.clear').addEventListener(
-      'click', 
-      () => {
-        product.orderamount = 0;
-
-        updateProduct(product.id, { orderamount: product.orderamount }, virtualScroller);
-
-        orderamount.textContent = product.orderamount;
-        orderamount.dataset.orderamount = product.orderamount;
-      }, 
-      false
-    );
-
-    return root;
-  }
-
-  const virtualScroller = new VirtualScroller(
-    document.getElementById('products'),
-    [],
-    renderProduct
-  );
-
-  const listButton = document.getElementById('list');
-
-  listButton.addEventListener(
-    'click', 
-    () => {
-      loadProducts()
-      .then((json) => virtualScroller.setItems(json));
-    }, 
-    false
-  );
-
-  const emptyButton = document.getElementById('empty');
-
-  emptyButton.addEventListener(
-    'click', 
-    () => virtualScroller.setItems([]), 
-    false
-  );
-  </script>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>
