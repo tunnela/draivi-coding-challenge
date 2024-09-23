@@ -22,10 +22,10 @@ const orderRecentFiles = (dir) => {
     .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 };
 
-const normalizePath = (path) => {
+const normalizePath = (filePath) => {
   return isWin ? 
-    win32.resolve(win32.normalize(path)) : 
-    path.resolve(path.normalize(path));
+    win32.resolve(win32.normalize(filePath)) : 
+    path.resolve(path.normalize(filePath));
 };
 
 puppeteer.use(StealthPlugin());
