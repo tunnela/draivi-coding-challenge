@@ -26,11 +26,14 @@ $scraper->onCreateQuery(function() {
     return '
         CREATE TABLE IF NOT EXISTS "products" (
             "id" INTEGER,
-            "number" NUMERIC NOT NULL UNIQUE,
+             /* Is padded with zeros, so can not be INTEGER */
+            "number" TEXT NOT NULL UNIQUE,
             "name" TEXT NOT NULL,
             "bottlesize" TEXT,
-            "price" NUMERIC NOT NULL,
-            "priceGBP" NUMERIC NOT NULL,
+             /* SQLite does not support DECIMAL */
+            "price" TEXT NOT NULL,
+             /* SQLite does not support DECIMAL */
+            "priceGBP" TEXT NOT NULL,
             "timestamp" INTEGER NOT NULL,
             "orderamount" INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY("id" AUTOINCREMENT)
