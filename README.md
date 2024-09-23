@@ -2,10 +2,10 @@
 
 ### Requirements
 
-PHP 7+
-Composer
-Node/NPM
-Chrome (installed with Puppeteer)
+- PHP 7+ (`php-sqlite3` package for fast testing)
+- Composer
+- Node/NPM
+- Chrome (installed with `puppeteer` package)
 
 ### Setup
 
