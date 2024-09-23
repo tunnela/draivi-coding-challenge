@@ -19,7 +19,7 @@ npm install
 composer install
 ```
 
-After this duplicate `.env.example` file and name it to `.env`. Open `.env` file and add at least value for `CURRENCYLAYER_ACCESS_KEY`. `NODE_BIN_PATH` is optional and can be left empty.
+After this duplicate `.env.example` file and name it to `.env`. Open `.env` file and add at least value for `CURRENCYLAYER_ACCESS_KEY` (get it from [https://currencylayer.com/](https://currencylayer.com/)). `NODE_BIN_PATH` is optional and can be left empty.
 
 ### Running
 
